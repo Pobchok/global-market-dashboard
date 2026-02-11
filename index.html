@@ -209,6 +209,40 @@
         .info-row { 
             grid-template-columns: repeat(4, 1fr) !important; 
         }
+        /* การตั้งค่าสำหรับหน้าจอมือถือ (ขนาดเล็กกว่า 768px) */
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto; /* อนุญาตให้เลื่อนลงได้ในมือถือ */
+    }
+    
+    .container, .info-row {
+        grid-template-columns: repeat(2, 1fr) !important; /* ในมือถือให้โชว์แถวละ 2 กล่องพอ */
+        gap: 8px;
+    }
+
+    .current-price {
+        font-size: 1.2rem !important; /* ลดขนาดราคาลงเพื่อให้พอดีกล่องในมือถือ */
+    }
+
+    .time {
+        font-size: 1.4rem !important;
+    }
+
+    .chart-container {
+        grid-column: span 2; /* กราฟขยายเต็มความกว้างมือถือ */
+        height: 300px; /* เพิ่มความสูงกราฟในมือถือให้อ่านง่าย */
+    }
+}
+
+/* สำหรับมือถือหน้าจอแคบมาก (ขนาดเล็กกว่า 480px) */
+@media (max-width: 480px) {
+    .container, .info-row {
+        grid-template-columns: repeat(1, 1fr) !important; /* มือถือแนวตั้งให้โชว์แถวละ 1 กล่อง */
+    }
+    .chart-container {
+        grid-column: span 1;
+    }
+}
     </style>
 </head>
 <body>
