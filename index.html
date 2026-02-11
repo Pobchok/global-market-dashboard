@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Market Dashboard - Pro</title>
@@ -196,13 +197,21 @@
         }
         /* สไตล์สำหรับกล่องกราฟ */
         .chart-container {
-            grid-column: span 4; /* ให้กราฟกว้างเต็มแถว */
-            height: 250px; 
+            width: 100%;
+            height: 400px; /* เพิ่มความสูงเป็น 400px เพื่อให้กราฟมีพื้นที่โหลด */
             background: #1a1d29;
             border-radius: 12px;
             border: 2px solid #3d4255;
+            margin-top: 15px;
+            position: relative;
             overflow: hidden;
-            margin-top: 5px;
+        }
+
+        /* ปรับความสูงกราฟในมือถือเพิ่มเติม */
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 300px;
+            }
         }
         
         /* ปรับสัดส่วน info-row เดิมให้เล็กลงเพื่อประหยัดพื้นที่ */
@@ -400,21 +409,32 @@
         // ฟังก์ชันสร้างกราฟ TradingView
         // ฟังก์ชันสร้างกราฟ TradingView ที่เสถียรกว่าเดิม
         function loadTradingView() {
-            new TradingView.widget({
-                "autosize": true,
-                "symbol": "OANDA:XAUUSD",
-                "interval": "30",
-                "timezone": "Asia/Bangkok",
-                "theme": "dark",
-                "style": "3",
-                "locale": "th",
-                "toolbar_bg": "#f1f3f6",
-                "enable_publishing": false,
-                "hide_top_toolbar": true,
-                "save_image": false,
-                "container_id": "tradingview_chart"
-            });
+            if (typeof TradingView !== 'undefined') {
+                new TradingView.widget({
+                    "autosize": true,
+                    "symbol": "OANDA:XAUUSD",
+                    "interval": "30",
+                    "timezone": "Asia/Bangkok",
+                    "theme": "dark",
+                    "style": "3",
+                    "locale": "th",
+                    "toolbar_bg": "#f1f3f6",
+                    "enable_publishing": false,
+                    "hide_top_toolbar": true,
+                    "save_image": false,
+                    "container_id": "tradingview_chart"
+                });
+            }
         }
+
+        // เรียกใช้ฟังก์ชันนี้ใน window.onload เดิมของคุณ
+        window.onload = () => {
+            updateClocks();
+            updateAll();
+            loadTradingView(); // เพิ่มบรรทัดนี้เข้าไป
+            setInterval(updateClocks, 1000);
+            setInterval(updateAll, 60000);
+        };
 
         // แก้ไขส่วนเรียกใช้งาน
         window.onload = () => {
