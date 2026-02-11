@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Market Dashboard - Pro</title>
+    <style>
+        /* จัดการ Layout ให้พอดีจอ 100% ไม่ต้องเลื่อนเมาส์ */
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background-color: #0f111a; 
+            color: #ffffff; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            height: 100vh; 
+            overflow: hidden; 
+        }
+
+        /* โซนโฆษณาบน */
+        .ad-top {
+            width: 100%;
+            height: 70px;
+            background: #161925;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #3d4255;
+            color: #5c6172;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* ส่วนเนื้อหาหลัก */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        h2 { 
+            font-size: 1.4rem; 
+            margin: 0 0 10px 0; 
+            letter-spacing: 2px; 
+            font-weight: 900; 
+            color: #f0f0f0;
+            text-transform: uppercase;
+        }
+
+        .container, .info-row { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 10px; 
+            width: 100%; 
+            max-width: 1300px; 
+            margin-bottom: 10px; 
+        }
+
+        .info-row { grid-template-columns: repeat(2, 1fr); }
+
+        .card { 
+            background: #1a1d29; 
+            padding: 10px; 
+            border-radius: 12px; 
+            text-align: center; 
+            border: 2px solid #3d4255; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .label { 
+            font-size: 0.85rem; 
+            color: #ffffff; 
+            font-weight: 800; 
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .time { 
+            font-size: 1.9rem; 
+            font-weight: 900; 
+            color: #00d2ff; 
+            margin: 2px 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .market-status { 
+            font-size: 0.75rem; 
+            padding: 2px 12px; 
+            font-weight: 900; 
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .market-hours { 
+            display: block; 
+            font-size: 0.85rem; 
+            color: #ffffff; 
+            font-weight: 700; 
+            background: rgba(255, 255, 255, 0.1); 
+            padding: 2px;
+            border-radius: 4px;
+        }
+
+        /* ราคาปัจจุบัน พร้อมข้อความนำหน้า */
+        .current-price { 
+            font-size: 2.1rem; 
+            font-weight: 900; 
+            margin: 2px 0; 
+        }
+        .current-price::before {
+            content: "Current Price:";
+            font-size: 0.8rem;
+            display: block;
+            color: #8a8f9d;
+            font-weight: 700;
+            margin-bottom: -2px;
+        }
+
+        .prev-close { 
+            font-size: 0.95rem; 
+            color: #ffab00; 
+            font-weight: 800; 
+        }
+
+        .open { background: #1b5e20; color: #a5d6a7; }
+        .closed { background: #b71c1c; color: #ef9a9a; }
+        .price-up { color: #4caf50; }
+        .price-down { color: #f44336; }
+
+        /* โซนโฆษณาล่าง */
+        /* ปรับปรุงโซนโฆษณาล่างให้เป็นแถบวิ่ง */
+        .ad-bottom {
+            width: 100%;
+            height: 45px;
+            background: #161925;
+            border-top: 1px solid #3d4255;
+            display: flex;
+            align-items: center;
+            overflow: hidden; /* ซ่อนข้อความที่ยาวเกินจอ */
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .ticker-wrapper {
+            display: flex;
+            animation: ticker 30s linear infinite; /* ปรับความเร็วตรงนี้ (วินาที) */
+        }
+
+        .ticker-item {
+            padding: 0 40px;
+            color: #00d2ff;
+            font-size: 0.95rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+        }
+
+        .ticker-item span {
+            color: #ffab00; /* สีสำหรับเน้นข้อความหัวข้อ */
+            margin-right: 10px;
+        }
+
+        /* เอฟเฟกต์การวิ่งของข้อความ */
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* หยุดวิ่งเมื่อเอาเมาส์ไปชี้ เพื่อให้อ่านง่ายขึ้น */
+        .ad-bottom:hover .ticker-wrapper {
+            animation-play-state: paused;
+        }
+
+        /* ปรับแต่งสำหรับจอขนาดเล็ก */
+        @media (max-height: 750px) {
+            .current-price { font-size: 1.7rem; }
+            .time { font-size: 1.5rem; }
+            .ad-top, .ad-bottom { height: 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ad-top">--- พื้นที่โฆษณาด้านบน (Banner AD) ---</div>
+
+    <div class="main-content">
+        <h2>Global Market Real-Time</h2>
+
+        <div class="container">
+            <div class="card">
+                <div class="label">Sydney (ASX) 🇦🇺</div>
+                <div id="Sydney-time" class="time">--:--:--</div>
+                <div id="Sydney-status" class="market-status">--</div>
+                <span class="market-hours">10:00 - 16:00</span>
+            </div>
+            <div class="card">
+                <div class="label">Tokyo (TSE) 🇯🇵</div>
+                <div id="Tokyo-time" class="time">--:--:--</div>
+                <div id="Tokyo-status" class="market-status">--</div>
+                <span class="market-hours">09:00 - 18:00</span>
+            </div>
+            <div class="card">
+                <div class="label">London (LSE) 🇬🇧</div>
+                <div id="London-time" class="time">--:--:--</div>
+                <div id="London-status" class="market-status">--</div>
+                <span class="market-hours">08:00 - 17:00</span>
+            </div>
+            <div class="card">
+                <div class="label">New York (NYSE) 🇺🇸</div>
+                <div id="NewYork-time" class="time">--:--:--</div>
+                <div id="NewYork-status" class="market-status">--</div>
+                <span class="market-hours">08:00 - 17:00</span>
+            </div>
+        </div>
+
+        <div class="info-row">
+            <div class="card">
+                <div class="label">ทองคำแท่งไทย (THB) 🪙</div>
+                <div id="gold-th-prev" class="prev-close">วันก่อนหน้า: --</div>
+                <div id="price-gold-th" class="current-price">--</div>
+            </div>
+            <div class="card">
+                <div class="label">Gold Spot (XAU/USD) 🌎</div>
+                <div id="gold-global-prev" class="prev-close">วันก่อนหน้า: --</div>
+                <div id="price-gold-global" class="current-price">--</div>
+            </div>
+        </div>
+
+        <div class="info-row">
+            <div class="card">
+                <div class="label">NASDAQ 100 📉</div>
+                <div id="nasdaq-prev" class="prev-close">วันก่อนหน้า: --</div>
+                <div id="price-nasdaq" class="current-price">--</div>
+            </div>
+            <div class="card">
+                <div class="label">S&P 500 Index 📊</div>
+                <div id="sp500-prev" class="prev-close">วันก่อนหน้า: --</div>
+                <div id="price-sp500" class="current-price">--</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ad-bottom">
+        <div class="ticker-wrapper">
+            <div class="ticker-item"><span>[AD]</span> สนใจลงโฆษณาตรงนี้ ติดต่อเรา @LineID </div>
+            <div class="ticker-item"><span>[NEWS]</span> ราคาทองคำวันนี้มีการขยับตัวอย่างมีนัยสำคัญ โปรดติดตามสถานการณ์อย่างใกล้ชิด </div>
+            <div class="ticker-item"><span>[MARKET]</span> ตลาดหุ้นโตเกียว (TSE) เปิดทำการปกติถึงเวลา 18:00 น. </div>
+            <div class="ticker-item"><span>[TIPS]</span> การลงทุนมีความเสี่ยง ผู้ลงทุนควรศึกษาข้อมูลก่อนการตัดสินใจ </div>
+            
+            <div class="ticker-item"><span>[AD]</span> สนใจลงโฆษณาตรงนี้ ติดต่อเรา @LineID </div>
+            <div class="ticker-item"><span>[NEWS]</span> ราคาทองคำวันนี้มีการขยับตัวอย่างมีนัยสำคัญ โปรดติดตามสถานการณ์อย่างใกล้ชิด </div>
+            <div class="ticker-item"><span>[MARKET]</span> ตลาดหุ้นโตเกียว (TSE) เปิดทำการปกติถึงเวลา 18:00 น. </div>
+            <div class="ticker-item"><span>[TIPS]</span> การลงทุนมีความเสี่ยง ผู้ลงทุนควรศึกษาข้อมูลก่อนการตัดสินใจ </div>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = 'YKsKMv_hp1bA4HKwjLms9RconSlFplmG';
+
+        function updateClocks() {
+            const markets = [
+                { id: 'Sydney', zone: 'Australia/Sydney', open: 10, close: 16 },
+                { id: 'Tokyo', zone: 'Asia/Tokyo', open: 9, close: 18 }, // แก้เป็น 18 (6 โมงเย็น) ตามหน้าจอ
+                { id: 'London', zone: 'Europe/London', open: 8, close: 16.5 },
+                { id: 'NewYork', zone: 'America/New_York', open: 9.5, close: 16 }
+            ];
+            markets.forEach(m => {
+                try {
+                    const now = new Date();
+                    const local = new Date(now.toLocaleString('en-US', { timeZone: m.zone }));
+                    document.getElementById(`${m.id}-time`).innerText = local.toTimeString().split(' ')[0];
+                    const hours = local.getHours() + local.getMinutes()/60;
+                    const isOpen = local.getDay() !== 0 && local.getDay() !== 6 && hours >= m.open && hours < m.close;
+                    const el = document.getElementById(`${m.id}-status`);
+                    el.innerText = isOpen ? "● OPEN" : "● CLOSED";
+                    el.className = `market-status ${isOpen ? 'open' : 'closed'}`;
+                } catch (e) { console.error(m.id + " clock error"); }
+            });
+        }
+
+        async function fetchThaiGold() {
+            try {
+                const res = await fetch('https://api.chnwt.dev/thai-gold-api/latest');
+                const data = await res.json();
+                if(data.status === "success") {
+                    const sellStr = data.response.price.gold_bar.sell;
+                    const priceEl = document.getElementById('price-gold-th');
+                    priceEl.innerText = sellStr + " ฿";
+                    
+                    const diffStr = String(data.response.price.gold_bar.diff || "0");
+                    const diffNum = parseFloat(diffStr.replace(/[+,]/g, ''));
+                    priceEl.className = 'current-price ' + (diffNum > 0 ? 'price-up' : diffNum < 0 ? 'price-down' : '');
+
+                    const yesterdayPrice = data.response.price.gold_bar.yesterday_sell || "รอข้อมูล";
+                    document.getElementById('gold-th-prev').innerText = "วันก่อนหน้า: " + yesterdayPrice;
+                }
+            } catch (e) { document.getElementById('price-gold-th').innerText = "Error"; }
+        }
+
+        async function fetchPolygon(symbol, priceId, prevId, isGold = false) {
+            try {
+                const res = await fetch(`https://api.polygon.io/v2/aggs/ticker/${symbol}/prev?adjusted=true&apiKey=${API_KEY}`);
+                const data = await res.json();
+                if (data.results && data.results[0]) {
+                    let price = data.results[0].c;
+                    let prev = data.results[0].o;
+                    if(!isGold) { price *= 50; prev *= 50; } 
+                    const el = document.getElementById(priceId);
+                    el.innerText = (isGold ? "$" : "") + price.toLocaleString(undefined, {maximumFractionDigits: 2});
+                    el.className = 'current-price ' + (price >= prev ? 'price-up' : 'price-down');
+                    document.getElementById(prevId).innerText = "วันก่อนหน้า: " + (isGold ? "$" : "") + prev.toLocaleString();
+                }
+            } catch (e) { console.error(symbol + " price error"); }
+        }
+
+        async function updateAll() {
+            updateClocks();
+            await fetchThaiGold();
+            await fetchPolygon('C:XAUUSD', 'price-gold-global', 'gold-global-prev', true);
+            await fetchPolygon('QQQ', 'price-nasdaq', 'nasdaq-prev');
+            await fetchPolygon('SPY', 'price-sp500', 'sp500-prev');
+        }
+
+        // เริ่มทำงานทันที
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAll();
+            setInterval(updateClocks, 1000);
+            setInterval(updateAll, 60000); // อัปเดตราคาใหม่ทุก 1 นาที
+        });
+    </script>
+</body>
+</html>
