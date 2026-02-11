@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Market Dashboard - Pro</title>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <style>
         /* จัดการ Layout ให้พอดีจอ 100% ไม่ต้องเลื่อนเมาส์ */
         body { 
@@ -197,14 +198,13 @@
         }
         /* สไตล์สำหรับกล่องกราฟ */
         .chart-container {
-            width: 100%;
-            height: 400px; /* เพิ่มความสูงเป็น 400px เพื่อให้กราฟมีพื้นที่โหลด */
+            width: 100% !important; /* บังคับความกว้าง */
+            min-height: 350px; /* กำหนดความสูงขั้นต่ำ */
             background: #1a1d29;
             border-radius: 12px;
             border: 2px solid #3d4255;
             margin-top: 15px;
-            position: relative;
-            overflow: hidden;
+            display: block !important; /* บังคับให้แสดงผลเป็นบล็อก */
         }
 
         /* ปรับความสูงกราฟในมือถือเพิ่มเติม */
