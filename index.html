@@ -60,7 +60,19 @@
             margin-bottom: 10px; 
         }
 
-        .info-row { grid-template-columns: repeat(2, 1fr); }
+      .info-row { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); /* เปลี่ยนจาก 2 เป็น 4 */
+    gap: 10px; 
+    width: 100%; 
+    max-width: 1300px; 
+    margin-bottom: 10px; 
+}
+
+/* ปรับขนาดตัวอักษรลงเล็กน้อยเพื่อให้ 4 กล่องวางในแถวเดียวได้สวยๆ */
+.info-row .current-price {
+    font-size: 1.6rem; 
+}
 
         .card { 
             background: #1a1d29; 
@@ -182,6 +194,21 @@
             .time { font-size: 1.5rem; }
             .ad-top, .ad-bottom { height: 40px; }
         }
+        /* สไตล์สำหรับกล่องกราฟ */
+        .chart-container {
+            grid-column: span 4; /* ให้กราฟกว้างเต็มแถว */
+            height: 250px; 
+            background: #1a1d29;
+            border-radius: 12px;
+            border: 2px solid #3d4255;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        /* ปรับสัดส่วน info-row เดิมให้เล็กลงเพื่อประหยัดพื้นที่ */
+        .info-row { 
+            grid-template-columns: repeat(4, 1fr) !important; 
+        }
     </style>
 </head>
 <body>
@@ -219,30 +246,33 @@
         </div>
 
         <div class="info-row">
-            <div class="card">
-                <div class="label">ทองคำแท่งไทย (THB) 🪙</div>
-                <div id="gold-th-prev" class="prev-close">วันก่อนหน้า: --</div>
-                <div id="price-gold-th" class="current-price">--</div>
-            </div>
-            <div class="card">
-                <div class="label">Gold Spot (XAU/USD) 🌎</div>
-                <div id="gold-global-prev" class="prev-close">วันก่อนหน้า: --</div>
-                <div id="price-gold-global" class="current-price">--</div>
-            </div>
-        </div>
+    <div class="card">
+        <div class="label">ทองคำแท่งไทย (THB) 🪙</div>
+        <div id="gold-th-prev" class="prev-close">วันก่อนหน้า: รอข้อมูล</div>
+        <div id="price-gold-th" class="current-price">--</div>
+    </div>
+    <div class="card">
+        <div class="label">Gold Spot (XAU/USD) 🌎</div>
+        <div id="gold-global-prev" class="prev-close">วันก่อนหน้า: --</div>
+        <div id="price-gold-global" class="current-price">--</div>
+    </div>
+    <div class="card">
+        <div class="label">NASDAQ 100 📉</div>
+        <div id="nasdaq-prev" class="prev-close">วันก่อนหน้า: --</div>
+        <div id="price-nasdaq" class="current-price">--</div>
+    </div>
+    <div class="card">
+        <div class="label">S&P 500 Index 📊</div>
+        <div id="sp500-prev" class="prev-close">วันก่อนหน้า: --</div>
+        <div id="price-sp500" class="current-price">--</div>
+    </div>
+</div>
 
-        <div class="info-row">
-            <div class="card">
-                <div class="label">NASDAQ 100 📉</div>
-                <div id="nasdaq-prev" class="prev-close">วันก่อนหน้า: --</div>
-                <div id="price-nasdaq" class="current-price">--</div>
-            </div>
-            <div class="card">
-                <div class="label">S&P 500 Index 📊</div>
-                <div id="sp500-prev" class="prev-close">วันก่อนหน้า: --</div>
-                <div id="price-sp500" class="current-price">--</div>
-            </div>
-        </div>
+        
+    </div>
+
+    <div class="chart-container">
+            <div id="tradingview_chart"></div>
     </div>
 
     <div class="ad-bottom">
@@ -331,6 +361,36 @@
             updateAll();
             setInterval(updateClocks, 1000);
             setInterval(updateAll, 60000); // อัปเดตราคาใหม่ทุก 1 นาที
+        });
+
+        // ฟังก์ชันสร้างกราฟ TradingView
+        function loadChart() {
+            const script = document.createElement('script');
+            script.src = 'https://s3.tradingview.com/tv.js';
+            script.async = true;
+            script.onload = () => {
+                new TradingView.widget({
+                    "autosize": true,
+                    "symbol": "OANDA:XAUUSD", // แสดงกราฟ Gold Spot
+                    "interval": "30",
+                    "timezone": "Asia/Bangkok",
+                    "theme": "dark",
+                    "style": "3", // แบบ Area พื้นที่ระบายสี
+                    "locale": "th",
+                    "toolbar_bg": "#f1f3f6",
+                    "enable_publishing": false,
+                    "hide_top_toolbar": true,
+                    "save_image": false,
+                    "container_id": "tradingview_chart"
+                });
+            };
+            document.head.appendChild(script);
+        }
+
+        // เรียกใช้งานตอนโหลดหน้าเว็บ
+        document.addEventListener('DOMContentLoaded', () => {
+            loadChart();
+            // ... updateAll เดิมของคุณ ...
         });
     </script>
 </body>
