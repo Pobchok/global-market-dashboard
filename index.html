@@ -413,35 +413,30 @@
 
         // ฟังก์ชันสร้างกราฟ TradingView ที่เสถียรกว่าเดิม
         function loadTradingView() {
-            function loadTradingView() {
     if (typeof TradingView !== 'undefined') {
-        // 1. กราฟเส้นเดิม (Area Chart)
+        // ชุดที่ 1: กราฟเส้น
         new TradingView.widget({
             "autosize": true,
             "symbol": "OANDA:XAUUSD",
             "interval": "1H",
             "timezone": "Asia/Bangkok",
             "theme": "light",
-            "style": "3", // เลข 3 คือกราฟเส้น
+            "style": "3",
             "container_id": "tradingview_chart"
-            // ... ค่าอื่นๆ ตามเดิมของคุณ ...
-        });
+        }); // <--- ต้องมีเซมิโคลอนหรือปิดชุดให้เรียบร้อย
 
-        // 2. กราฟแท่งเทียนที่เพิ่มใหม่ (Candlestick Chart)
+        // ชุดที่ 2: กราฟแท่งเทียน
         new TradingView.widget({
             "autosize": true,
             "symbol": "OANDA:XAUUSD",
-            "interval": "D",           // D = รายวัน จะเห็นแท่งเทียนชัดกว่า
+            "interval": "D",
             "timezone": "Asia/Bangkok",
             "theme": "light",
-            "style": "1",              // หัวใจสำคัญ: เลข 1 คือกราฟแท่งเทียน
-            "container_id": "tradingview_candle", // ต้องตรงกับ id ในข้อ 1
-            "locale": "th",
-            "hide_top_toolbar": false
+            "style": "1",
+            "container_id": "tradingview_candle"
         });
     }
 }
-        }
 
         // เรียกใช้ฟังก์ชันนี้ใน window.onload เดิมของคุณ
         window.onload = () => {
