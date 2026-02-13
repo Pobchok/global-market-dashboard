@@ -319,8 +319,8 @@
     </div>
 
     <div class="chart-container">
-            <div id="tradingview_chart" style="height: 40vh; margin-bottom: 10px;"></div>
-            <div id="tradingview_candle" style="height: 40vh;"></div>
+        <div id="tradingview_chart" style="height: 35vh; margin-bottom: 5px;"></div>
+        <div id="tradingview_candle" style="height: 35vh;"></div>
     </div>
 
     <div class="ad-bottom">
@@ -415,24 +415,24 @@
         function loadTradingView() {
     if (typeof TradingView !== 'undefined') {
         // สำหรับกราฟที่ 1 (Line)
-new TradingView.widget({
-    "autosize": true, // ให้มันขยายเต็ม div ที่เราตั้งความสูงไว้
-    "symbol": "OANDA:XAUUSD",
-    "theme": "light",
-    "style": "3",
-    "hide_top_toolbar": true, // ปิดแถบบนเพื่อประหยัดพื้นที่
-    "container_id": "tradingview_chart"
+        new TradingView.widget({
+         "autosize": true, // ให้มันขยายเต็ม div ที่เราตั้งความสูงไว้
+         "symbol": "OANDA:XAUUSD",
+         "theme": "light",
+         "style": "3",
+         "hide_top_toolbar": true, // ปิดแถบบนเพื่อประหยัดพื้นที่
+         "container_id": "tradingview_chart"
 });
 
-// สำหรับกราฟที่ 2 (Candle)
-new TradingView.widget({
-    "autosize": true,
-    "symbol": "OANDA:XAUUSD",
-    "theme": "light",
-    "style": "1",
-    "hide_top_toolbar": true, // ปิดแถบบนเพื่อประหยัดพื้นที่
-    "hide_legend": true,      // ปิดชื่อหุ้นด้านซ้ายบน (ถ้าอยากให้คลีนที่สุด)
-    "container_id": "tradingview_candle"
+        // สำหรับกราฟที่ 2 (Candle)
+         new TradingView.widget({
+         "autosize": true,
+            "symbol": "OANDA:XAUUSD",
+            "theme": "light",
+            "style": "1",
+            "hide_top_toolbar": true, // ปิดแถบบนเพื่อประหยัดพื้นที่
+            "hide_legend": true,      // ปิดชื่อหุ้นด้านซ้ายบน (ถ้าอยากให้คลีนที่สุด)
+            "container_id": "tradingview_candle"
 });
     }
 }
