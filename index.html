@@ -421,6 +421,8 @@
         new TradingView.widget({
          "autosize": true, // ให้มันขยายเต็ม div ที่เราตั้งความสูงไว้
          "symbol": "OANDA:XAUUSD",
+         "interval": "D",
+         "timezone": "Asia/Bangkok",
          "theme": "light",
          "style": "3",
          "hide_top_toolbar": true, // ปิดแถบบนเพื่อประหยัดพื้นที่
@@ -428,14 +430,25 @@
 });
 
         // สำหรับกราฟที่ 2 (Candle)
-         new TradingView.widget({
-         "autosize": true,
-            "symbol": "OANDA:XAUUSD",
-            "theme": "light",
-            "style": "1",
-            "hide_top_toolbar": true, // ปิดแถบบนเพื่อประหยัดพื้นที่
-            "hide_legend": true,      // ปิดชื่อหุ้นด้านซ้ายบน (ถ้าอยากให้คลีนที่สุด)
-            "container_id": "tradingview_candle"
+         // แก้ไขในชุดที่ 2 (tradingview_candle)
+new TradingView.widget({
+    "autosize": true,
+    "symbol": "OANDA:XAUUSD",
+    "interval": "D",
+    "timezone": "Asia/Bangkok",
+    "theme": "light",
+    "style": "1",
+    "locale": "th",
+    "toolbar_bg": "#f1f3f6",
+    "enable_publishing": false,
+    
+    // --- จุดที่ต้องแก้ไขคือ 2 บรรทัดนี้ครับ ---
+    "hide_top_toolbar": false,  // เปลี่ยนจาก true เป็น false เพื่อเปิดแถบเครื่องมือบน
+    "withdateranges": true,     // เพิ่มบรรทัดนี้เพื่อให้มีปุ่มเลือกช่วงเวลา (1D, 5D, 1M, etc.)
+    "hide_side_toolbar": false, // ถ้าอยากได้เครื่องมือวาดเส้นด้านซ้าย ให้ตั้งเป็น false ครับ
+    
+    "save_image": false,
+    "container_id": "tradingview_candle"
 });
     }
 }
