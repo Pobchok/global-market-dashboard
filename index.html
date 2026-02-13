@@ -320,6 +320,7 @@
 
     <div class="chart-container">
             <div id="tradingview_chart"></div>
+            <div id="tradingview_candle" style="height: 500px; margin-top: 20px;"></div>
     </div>
 
     <div class="ad-bottom">
@@ -412,22 +413,34 @@
 
         // ฟังก์ชันสร้างกราฟ TradingView ที่เสถียรกว่าเดิม
         function loadTradingView() {
-            if (typeof TradingView !== 'undefined') {
-                new TradingView.widget({
-                    "autosize": true,
-                    "symbol": "OANDA:XAUUSD",
-                    "interval": "1H",
-                    "timezone": "Asia/Bangkok",
-                    "theme": "light",
-                    "style": "3",
-                    "locale": "th",
-                    "toolbar_bg": "#f1f3f6",
-                    "enable_publishing": false,
-                    "hide_top_toolbar": true,
-                    "save_image": false,
-                    "container_id": "tradingview_chart"
-                });
-            }
+            function loadTradingView() {
+    if (typeof TradingView !== 'undefined') {
+        // 1. กราฟเส้นเดิม (Area Chart)
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": "OANDA:XAUUSD",
+            "interval": "1H",
+            "timezone": "Asia/Bangkok",
+            "theme": "light",
+            "style": "3", // เลข 3 คือกราฟเส้น
+            "container_id": "tradingview_chart"
+            // ... ค่าอื่นๆ ตามเดิมของคุณ ...
+        });
+
+        // 2. กราฟแท่งเทียนที่เพิ่มใหม่ (Candlestick Chart)
+        new TradingView.widget({
+            "autosize": true,
+            "symbol": "OANDA:XAUUSD",
+            "interval": "D",           // D = รายวัน จะเห็นแท่งเทียนชัดกว่า
+            "timezone": "Asia/Bangkok",
+            "theme": "light",
+            "style": "1",              // หัวใจสำคัญ: เลข 1 คือกราฟแท่งเทียน
+            "container_id": "tradingview_candle", // ต้องตรงกับ id ในข้อ 1
+            "locale": "th",
+            "hide_top_toolbar": false
+        });
+    }
+}
         }
 
         // เรียกใช้ฟังก์ชันนี้ใน window.onload เดิมของคุณ
