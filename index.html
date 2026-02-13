@@ -319,8 +319,8 @@
     </div>
 
     <div class="chart-container">
-            <div id="tradingview_chart"></div>
-            <div id="tradingview_candle" style="height: 500px; margin-top: 20px;"></div>
+            <div id="tradingview_chart" style="height: 40vh; margin-bottom: 10px;"></div>
+            <div id="tradingview_candle" style="height: 40vh;"></div>
     </div>
 
     <div class="ad-bottom">
@@ -414,27 +414,26 @@
         // ฟังก์ชันสร้างกราฟ TradingView ที่เสถียรกว่าเดิม
         function loadTradingView() {
     if (typeof TradingView !== 'undefined') {
-        // ชุดที่ 1: กราฟเส้น
-        new TradingView.widget({
-            "autosize": true,
-            "symbol": "OANDA:XAUUSD",
-            "interval": "1H",
-            "timezone": "Asia/Bangkok",
-            "theme": "light",
-            "style": "3",
-            "container_id": "tradingview_chart"
-        }); // <--- ต้องมีเซมิโคลอนหรือปิดชุดให้เรียบร้อย
+        // สำหรับกราฟที่ 1 (Line)
+new TradingView.widget({
+    "autosize": true, // ให้มันขยายเต็ม div ที่เราตั้งความสูงไว้
+    "symbol": "OANDA:XAUUSD",
+    "theme": "light",
+    "style": "3",
+    "hide_top_toolbar": true, // ปิดแถบบนเพื่อประหยัดพื้นที่
+    "container_id": "tradingview_chart"
+});
 
-        // ชุดที่ 2: กราฟแท่งเทียน
-        new TradingView.widget({
-            "autosize": true,
-            "symbol": "OANDA:XAUUSD",
-            "interval": "D",
-            "timezone": "Asia/Bangkok",
-            "theme": "light",
-            "style": "1",
-            "container_id": "tradingview_candle"
-        });
+// สำหรับกราฟที่ 2 (Candle)
+new TradingView.widget({
+    "autosize": true,
+    "symbol": "OANDA:XAUUSD",
+    "theme": "light",
+    "style": "1",
+    "hide_top_toolbar": true, // ปิดแถบบนเพื่อประหยัดพื้นที่
+    "hide_legend": true,      // ปิดชื่อหุ้นด้านซ้ายบน (ถ้าอยากให้คลีนที่สุด)
+    "container_id": "tradingview_candle"
+});
     }
 }
 
