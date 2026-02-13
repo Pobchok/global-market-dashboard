@@ -318,10 +318,13 @@
         
     </div>
 
-    <div class="chart-container">
-        <div id="tradingview_chart" style="height: 35vh; margin-bottom: 5px;"></div>
-        <div id="tradingview_candle" style="height: 35vh;"></div>
-    </div>
+    <div class="chart-container" style="display: flex; flex-direction: column; height: 70vh;">
+    <div id="tradingview_chart" style="flex: 1; min-height: 0;"></div>
+    
+    <div style="height: 5px;"></div>
+
+    <div id="tradingview_candle" style="flex: 1; min-height: 0;"></div>
+</div>
 
     <div class="ad-bottom">
         <div class="ticker-wrapper">
