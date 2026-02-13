@@ -410,7 +410,6 @@
             setInterval(updateAll, 60000); // อัปเดตราคาใหม่ทุก 1 นาที
         });
 
-        // ฟังก์ชันสร้างกราฟ TradingView
         // ฟังก์ชันสร้างกราฟ TradingView ที่เสถียรกว่าเดิม
         function loadTradingView() {
             if (typeof TradingView !== 'undefined') {
@@ -419,7 +418,7 @@
                     "symbol": "OANDA:XAUUSD",
                     "interval": "1H",
                     "timezone": "Asia/Bangkok",
-                    "theme": "white",
+                    "theme": "light",
                     "style": "3",
                     "locale": "th",
                     "toolbar_bg": "#f1f3f6",
